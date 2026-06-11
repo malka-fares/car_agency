@@ -1,0 +1,195 @@
+<odoo>
+
+    <record id="view_car_list" model="ir.ui.view">
+        <field name="name">car.car.list</field>
+        <field name="model">car.car</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="registration_number"/>
+                <field name="state"/>
+
+            </list>
+        </field>
+    </record>
+
+    <record id="view_car_form" model="ir.ui.view">
+        <field name="name">car.car.form</field>
+        <field name="model">car.car</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <header>
+                        <field name="state"
+                               widget="statusbar"
+                               statusbar_visible="available,rented,damaged"/>
+                        <button name="action_set_available"
+                                string="Available"
+                                type="object"
+                                class="btn-success"/>
+                        <button name="action_set_rented"
+                                string="Rented"
+                                type="object"
+                                class="btn-warning"/>
+                        <button name="action_open_damage_wizard"
+                                string="Damaged"
+                                type="object"
+                                class="btn-danger"/>
+                    </header>
+
+                    <group>
+                        <group>
+                            <field name="image" widget="image"/>
+                            <field name="sequence"/>
+                            <field name="name"/>
+                            <field name="registration_number"/>
+                            <field name="state" invisible="1"/>
+                            <field name="mileage"/>
+                        </group>
+                        <group>
+                            <field name="customer_id"/>
+                            <field name="agency_id"
+                                   can_create="false"
+                                   can_write="false"
+                                   options="{'no_create': True, 'no_create_edit': True}"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="damage_reason"
+                                   invisible="state != 'damaged'"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_car_kanban" model="ir.ui.view">
+        <field name="name">car.car.kanban</field>
+        <field name="model">car.car</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="name"/>
+                <field name="registration_number"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="card">
+                        <div t-attf-class="
+                         #{record.state.raw_value == 'available' and 'bg-success'}
+                         #{record.state.raw_value == 'rented' and 'bg-warning'}
+                         #{record.state.raw_value == 'damaged' and 'bg-danger'}
+                         p-3 rounded">
+                            <strong>
+                                <field name="name"/>
+                            </strong>
+                            <br/>
+                            <span>Registration:</span>
+                            <field name="registration_number"/>
+                            <br/>
+                            <span>State:</span>
+                            <field name="state"/>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    <record id="view_car_graph" model="ir.ui.view">
+        <field name="name">car.car.graph</field>
+        <field name="model">car.car</field>
+        <field name="arch" type="xml">
+            <graph string="Cars Analysis" type="bar">
+                <field name="state"/>
+            </graph>
+        </field>
+    </record>
+    <record id="action_car_list" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_car_list"/>
+        <field name="act_window_id" ref="action_car"/>
+    </record>
+    <record id="action_car_form" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_car_form"/>
+        <field name="act_window_id" ref="action_car"/>
+    </record>
+    <record id="action_car_graph" model="ir.actions.act_window.view">
+        <field name="sequence" eval="3"/>
+        <field name="view_mode">graph</field>
+        <field name="view_id" ref="view_car_graph"/>
+        <field name="act_window_id" ref="action_car"/>
+    </record>
+
+    <record id="action_car" model="ir.actions.act_window">
+        <field name="name">Cars</field>
+        <field name="res_model">car.car</field>
+        <field name="view_mode">list,form,graph,kanban</field>
+
+
+    </record>
+
+    <menuitem id="menu_car_root" name="Car Agency"/>
+    <menuitem id="menu_car" name="Cars" parent="menu_car_root" action="action_car"/>
+    <menuitem id="menu_agency" name="Agencies" parent="menu_car_root" action="action_agency"/>
+
+    <record id="view_agency_list" model="ir.ui.view">
+        <field name="name">agency.list</field>
+        <field name="model">car.agency</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="responsible_id"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_agency_form" model="ir.ui.view">
+        <field name="name">agency.form</field>
+        <field name="model">car.agency</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object"
+                                name="action_open_brands"
+                                class="oe_stat_button"
+                                icon="fa-tags">
+                            <field name="brand_count"
+                                   string="Brands"
+                                   widget="statinfo"/>
+                        </button>
+                    </div>
+                    <group>
+                        <field name="name"/>
+                        <field name="responsible_id"/>
+                        <field name="car_ids"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_agency" model="ir.actions.act_window">
+        <field name="name">Agencies</field>
+        <field name="res_model">car.agency</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_car_search" model="ir.ui.view">
+        <field name="name">car.serach</field>
+        <field name="model">car.car</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="registration_number"/>
+                <filter name="available"
+                        string="Available"
+                        domain="[('state','=','available')]"/>
+                <filter name="rented"
+                        string="Rented"
+                        domain="[('state','=','rented')]"/>
+                <filter name="damaged"
+                        string="Damaged"
+                        domain="[('state','=','damaged')]"/>
+            </search>
+        </field>
+    </record>
+</odoo>

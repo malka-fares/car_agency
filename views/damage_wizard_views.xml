@@ -1,0 +1,21 @@
+<odoo>
+    <record id="view_damage_wizard_form" model="ir.ui.view">
+        <field name="name">damage.wizard.form</field>
+        <field name="model">damage.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Damage Reason">
+                <group>
+                    <field name="reason"/>
+                </group>
+                <footer>
+                    <button name="action_confirm_damage"
+                            string="Confirm"
+                            type="object"
+                            class="btn-primary"/>
+                    <button string="Cancel"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

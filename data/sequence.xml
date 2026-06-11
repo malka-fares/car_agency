@@ -1,0 +1,8 @@
+<odoo>
+<record id="seq_car" model="ir.sequence">
+<field name="name">Car Sequence</field>
+<field name="code">car.sequence</field>
+<field name="prefix">CAR-</field>
+<field name="padding">4</field>
+</record>
+</odoo>

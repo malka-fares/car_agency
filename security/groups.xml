@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="module_category_car_agency"
+            model="ir.module.category">
+        <field name="name">Car Agency</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <record model="res.groups.privilege"
+            id="res_groups_privilege_car">
+        <field name="name">Car Agency</field>
+        <field name="sequence">1</field>
+        <field name="category_id"
+               ref="module_category_car_agency"/>
+    </record>
+
+    <record id="group_car_user"
+            model="res.groups">
+        <field name="name">Car User</field>
+        <field name="privilege_id"
+               ref="res_groups_privilege_car"/>
+    </record>
+
+    <record id="group_car_manager"
+            model="res.groups">
+        <field name="name">Car Manager</field>
+        <field name="privilege_id"
+               ref="res_groups_privilege_car"/>
+        <field name="implied_ids"
+               eval="[(4, ref('car_agency.group_car_user'))]"/>
+    </record>
+</odoo>
