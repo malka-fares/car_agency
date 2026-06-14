@@ -22,6 +22,7 @@ class Agency(models.Model):
             'view_mode': 'list,form',
             'domain': [('agency_id', '=', self.id)],
             'target': 'current',
+            #malka
         }
 
 
